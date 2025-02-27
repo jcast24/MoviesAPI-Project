@@ -33,6 +33,26 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "Movies.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Movies.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Movies.Application.dll": {}
+        }
+      },
+      "Movies.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Movies.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Movies.Contracts.dll": {}
+        }
       }
     }
   },
@@ -67,11 +87,23 @@
         "microsoft.openapi.1.6.17.nupkg.sha512",
         "microsoft.openapi.nuspec"
       ]
+    },
+    "Movies.Application/1.0.0": {
+      "type": "project",
+      "path": "../Movies.Application/Movies.Application.csproj",
+      "msbuildProject": "../Movies.Application/Movies.Application.csproj"
+    },
+    "Movies.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Movies.Contracts/Movies.Contracts.csproj",
+      "msbuildProject": "../Movies.Contracts/Movies.Contracts.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Microsoft.AspNetCore.OpenApi >= 9.0.2"
+      "Microsoft.AspNetCore.OpenApi >= 9.0.2",
+      "Movies.Application >= 1.0.0",
+      "Movies.Contracts >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -106,7 +138,14 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "E:\\dev\\CSharp\\MoviesAPI\\Movies.Application\\Movies.Application.csproj": {
+              "projectPath": "E:\\dev\\CSharp\\MoviesAPI\\Movies.Application\\Movies.Application.csproj"
+            },
+            "E:\\dev\\CSharp\\MoviesAPI\\Movies.Contracts\\Movies.Contracts.csproj": {
+              "projectPath": "E:\\dev\\CSharp\\MoviesAPI\\Movies.Contracts\\Movies.Contracts.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
