@@ -1,5 +1,7 @@
 .idea/
 
+**/*.obj
+
 Movies.API/obj/
 
 Movies.Contracts/obj/
