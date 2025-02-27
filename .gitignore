@@ -1,7 +1,7 @@
 .idea/
 
-Movies.API/obj/
+Movies.API/obj
 
-Movies.Contracts/obj/
+Movies.Contracts/obj
 
-Movies.Application/obj/
+Movies.Application/obj
