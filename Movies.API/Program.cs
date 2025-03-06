@@ -7,6 +7,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var config = builder.Configuration;
 
         // Add services to the container.
 
@@ -15,6 +16,7 @@ public class Program
         builder.Services.AddOpenApi();
 
         builder.Services.AddApplication();
+        builder.Services.AddDatabase(config["Database:ConnectionString"]);
         
         var app = builder.Build();
 
