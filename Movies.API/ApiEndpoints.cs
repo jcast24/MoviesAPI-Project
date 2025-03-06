@@ -11,7 +11,7 @@ public static class ApiEndpoints
         public const string Create = Base;
         
         // :guid is a constraint on the route. only accepts guid
-        public const string Get = $"{Base}/{{id:guid}}";
+        public const string Get = $"{Base}/{{idOrSlug}}";
 
         public const string GetAll = Base;
 
