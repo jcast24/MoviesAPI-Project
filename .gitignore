@@ -7,3 +7,11 @@ Movies.API/obj/
 Movies.Contracts/obj/
 
 Movies.Application/obj/
+
+Movies.API/bin
+
+Movies.Contracts/bin
+
+Movies.Application/bin
+
+MoviesAPI.sln.DotSettings.user
