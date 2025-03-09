@@ -6,6 +6,13 @@ namespace Movies.Application.Services;
 public class MovieService : IMovieService
 {
     private readonly IMovieRepository _movieRepository;
+
+    public MovieService(IMovieRepository movieRepository)
+    {
+        _movieRepository = movieRepository;
+    }
+    
+    
     public Task<bool> CreateAsync(Movie movie)
     {
         return _movieRepository.CreateAsync(movie);
