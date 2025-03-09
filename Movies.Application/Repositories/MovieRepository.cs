@@ -99,7 +99,7 @@ public class MovieRepository : IMovieRepository
             Id = x.id,
             Title = x.title,
             YearOfRelease = x.yearofrelease,
-            Genres = Enumerable.ToList(x.genres.Split(','));
+            Genres = Enumerable.ToList(x.genres.Split(','))
         });
     }
 
@@ -113,8 +113,11 @@ public class MovieRepository : IMovieRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> ExistsByIdAsync(Guid id)
+    public async Task<bool> ExistsByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+        return await connection.ExecuteScalarAsync<bool>(
+            new CommandDefinition("""select count(1) from movies where id = @id """, new {id}));
+        
     }
 }
