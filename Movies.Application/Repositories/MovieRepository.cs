@@ -103,14 +103,41 @@ public class MovieRepository : IMovieRepository
         });
     }
 
-    public Task<bool> UpdateAsync(Movie movie)
+    public async Task<bool> UpdateAsync(Movie movie)
     {
-        throw new NotImplementedException();
+        using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+        using var transaction = connection.BeginTransaction();
+
+        await connection.ExecuteAsync(new CommandDefinition("""
+                                                            delete from genres wher movieid = @id
+                                                            """, new {id =movie.Id}));
+        // Loop over the genres and insert them anew into the database
+        foreach (var genre in movie.Genres)
+        {
+            await connection.ExecuteAsync(new CommandDefinition("""
+                                                                insert into genres (movieId, name)
+                                                                values (@MovieId, @Name)
+                                                                """, new {MovieId = movie.Id, Name = genre}));
+        }
+
+        var result = await connection.ExecuteAsync(new CommandDefinition("""
+                                                                         update movies set slug = @Slug, title = @Title, yearofrelease = @YearOfRelease
+                                                                         where id=@Id
+                                                                         """, movie));
+        transaction.Commit();
+        return result > 0;
     }
 
-    public Task<bool> DeleteByIdAsync(Guid id)
+    public async Task<bool> DeleteByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        using var connection = await _dbConnectionFactory.CreateConnectionAsync();
+        using var transaction = connection.BeginTransaction();
+
+        var result = await connection.ExecuteAsync(new CommandDefinition("""
+                                                            delete from genres where movieid=@id
+                                                            """, new { id }));
+        transaction.Commit();
+        return result > 0;
     }
 
     public async Task<bool> ExistsByIdAsync(Guid id)
