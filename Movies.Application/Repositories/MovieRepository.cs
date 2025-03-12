@@ -12,7 +12,7 @@ public class MovieRepository : IMovieRepository
     {
         _dbConnectionFactory = dbConnectionFactory;
     }
-    
+
     public async Task<bool> CreateAsync(Movie movie)
     {
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
@@ -31,6 +31,7 @@ public class MovieRepository : IMovieRepository
                                                                     """, new { MovieId = movie.Id, Name = genre }));
             }
         }
+
         transaction.Commit();
 
         return result > 0;
@@ -48,10 +49,10 @@ public class MovieRepository : IMovieRepository
             return null;
         }
 
-        var genres = await 
+        var genres = await
             connection.QueryAsync<string>(new CommandDefinition(
                 """select name from genres where movieid = @id""", new { id }));
-        
+
         foreach (var genre in genres)
         {
             movie.Genres.Add(genre);
@@ -72,10 +73,10 @@ public class MovieRepository : IMovieRepository
             return null;
         }
 
-        var genres = await 
+        var genres = await
             connection.QueryAsync<string>(new CommandDefinition(
                 """select name from genres where movieid = @id""", new { id = movie.Id }));
-        
+
         foreach (var genre in genres)
         {
             movie.Genres.Add(genre);
@@ -110,14 +111,14 @@ public class MovieRepository : IMovieRepository
 
         await connection.ExecuteAsync(new CommandDefinition("""
                                                             delete from genres wher movieid = @id
-                                                            """, new {id =movie.Id}));
+                                                            """, new { id = movie.Id }));
         // Loop over the genres and insert them anew into the database
         foreach (var genre in movie.Genres)
         {
             await connection.ExecuteAsync(new CommandDefinition("""
                                                                 insert into genres (movieId, name)
                                                                 values (@MovieId, @Name)
-                                                                """, new {MovieId = movie.Id, Name = genre}));
+                                                                """, new { MovieId = movie.Id, Name = genre }));
         }
 
         var result = await connection.ExecuteAsync(new CommandDefinition("""
@@ -134,8 +135,8 @@ public class MovieRepository : IMovieRepository
         using var transaction = connection.BeginTransaction();
 
         var result = await connection.ExecuteAsync(new CommandDefinition("""
-                                                            delete from genres where movieid=@id
-                                                            """, new { id }));
+                                                                         delete from genres where movieid=@id
+                                                                         """, new { id }));
         transaction.Commit();
         return result > 0;
     }
@@ -144,7 +145,6 @@ public class MovieRepository : IMovieRepository
     {
         using var connection = await _dbConnectionFactory.CreateConnectionAsync();
         return await connection.ExecuteScalarAsync<bool>(
-            new CommandDefinition("""select count(1) from movies where id = @id """, new {id}));
-        
+            new CommandDefinition("""select count(1) from movies where id = @id """, new { id }));
     }
 }
