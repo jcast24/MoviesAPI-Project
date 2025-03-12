@@ -22,7 +22,7 @@ public class MovieValidator : AbstractValidator<Movie>
         // Only accept movies that have been already released
         RuleFor(x => x.YearOfRelease).LessThanOrEqualTo(DateTime.UtcNow.Year);
 
-        RuleFor(x => x.Slug).MustAsync(ValidateSlug()).WithMessage("This movie already exists in the system");
+        RuleFor(x => x.Slug).MustAsync(ValidateSlug).WithMessage("This movie already exists in the system");
 
     }
 
