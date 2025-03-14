@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Movies.API.Mapping;
 using Movies.Application.Repositories;
 using Movies.Application.Services;
@@ -6,6 +7,7 @@ using Movies.Contracts.Requests;
 
 namespace Movies.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api")]
 public class MoviesController : ControllerBase
@@ -25,7 +27,8 @@ public class MoviesController : ControllerBase
         // return Created($"/{ApiEndpoints.Movies.Create}/{movie.Id}", movie); // Should return 201 created
         return CreatedAtAction(nameof(Get), new { idOrSlug = movie.Id }, movie);
     }
-
+    
+    [AllowAnonymous]
     [HttpGet(ApiEndpoints.Movies.Get)]
     public async Task<IActionResult> Get([FromRoute] string idOrSlug, CancellationToken token)
     {
@@ -40,7 +43,8 @@ public class MoviesController : ControllerBase
         var response = movie.MapToResponse();
         return Ok(response);
     }
-
+    
+    [AllowAnonymous]
     [HttpGet(ApiEndpoints.Movies.GetAll)]
     public async Task<IActionResult> GetAll(CancellationToken token)
     {
