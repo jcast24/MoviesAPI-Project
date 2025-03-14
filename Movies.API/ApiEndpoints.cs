@@ -18,5 +18,19 @@ public static class ApiEndpoints
         public const string Update = $"{Base}/{{id:guid}}";
 
         public const string Delete = $"{Base}/{{id:guid}}";
+        
+        // Ratings endpoint
+        public const string Rate = $"{Base}/{{id:guid}}/ratings";
+        public const string DeleteRating = $"{Base}/{{id:guid}}/ratings";
+        
+    }
+    // Get all ratings
+    public static class Ratings
+    {
+        private const string Base = $"{ApiBase}/ratings";
+        
+        // the /me is pretty common
+        public const string GetUserRatings = $"{Base}/me";
     }
 }
+
