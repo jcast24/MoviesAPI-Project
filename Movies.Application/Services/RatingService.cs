@@ -42,6 +42,6 @@ public class RatingService : IRatingService
 
     public Task<bool> DeleteRatingAsync(Guid movieId, Guid userId, CancellationToken token = default)
     {
-        return _ratingRepository.DeleteRatingAsync(movieId, userId, token);
+        return _ratingRepository.DeleteRatingAsync(movieId, userId, token);     
     }
 }
