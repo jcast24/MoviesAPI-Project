@@ -9,6 +9,7 @@ public class MovieService : IMovieService
     private readonly IMovieRepository _movieRepository;
     // inject the validator 
     private readonly IValidator<Movie> _movieValidator;
+    private readonly IRatingRepository _ratingRepository;
 
     public MovieService(IMovieRepository movieRepository, CancellationToken token = default)
     {
@@ -50,7 +51,20 @@ public class MovieService : IMovieService
             return null;
         }
 
-        await _movieRepository.UpdateAsync(movie, userid, token);
+        await _movieRepository.UpdateAsync(movie, token);
+
+        if (!userid.HasValue)
+        {
+            var rating = await _ratingRepository.GetRatingAsync(movie.Id, token);
+            movie.Rating = rating;
+            return movie;
+        }
+
+        var ratings = await _ratingRepository.GetRatingAsync(movie.Id, userid.Value, token);
+        movie.Rating = ratings.Rating;
+        movie.UserRating = ratings.UserRating;
+        
+        
         return movie;
     }
 
