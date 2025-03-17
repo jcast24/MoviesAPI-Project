@@ -1,4 +1,5 @@
-﻿using Movies.Application.Models;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Movies.Application.Models;
 using Movies.Contracts.Requests;
 using Movies.Contracts.Responses;
 
@@ -33,14 +34,6 @@ public static class ContractMapping
         };
     }
 
-    public static MoviesResponse MapToResponse(this IEnumerable<Movie> movies)
-    {
-        return new MoviesResponse
-        {
-            Items = movies.Select(MapToResponse)
-        };
-    }
-    
     // For the Update method in Controllers
     public static Movie MapToMovie(this UpdateMovieRequest request, Guid id)
     {
@@ -50,6 +43,17 @@ public static class ContractMapping
             Title = request.Title,
             YearOfRelease = request.YearOfRelease,
             Genres = request.Genres.ToList()
+        };
+    }
+
+    public static MoviesResponse MapToResponse(this IEnumerable<Movie> movies, int page, int pageSize, int totalCount)
+    {
+        return new MoviesResponse
+        {
+            Items = movies.Select(MapToResponse),
+            Page = page,
+            PageSize = pageSize,
+            Total = totalCount
         };
     }
 
@@ -71,7 +75,9 @@ public static class ContractMapping
             YearOfRelease = request.Year,
             SortField = request.SortBy?.Trim('+', '-'),
             SortOrder = request.SortBy is null ? SortOrder.Unsorted : 
-                request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending
+                request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending,
+            Page = request.Page,
+            PageSize = request.PageSize
         };
     }
 
