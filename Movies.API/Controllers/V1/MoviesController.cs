@@ -30,8 +30,8 @@ public class MoviesController : ControllerBase
     }
     
     [HttpGet(ApiEndpoints.Movies.Get)]
-    public async Task<IActionResult> Get([FromRoute] string idOrSlug, CancellationToken token,
-        [FromServices] LinkGenerator linkGenerator)
+    public async Task<IActionResult> Get([FromRoute] string idOrSlug,
+        [FromServices] LinkGenerator linkGenerator, CancellationToken token)
     {
         var userId = HttpContext.GetUserId();
         
@@ -45,7 +45,7 @@ public class MoviesController : ControllerBase
 
         var response = movie.MapToResponse();
         
-        // Hal 
+        // Hal approach, not really needed 
         var movieObj = new { id = movie.Id };
         response.Links.Add(new Link
         {
