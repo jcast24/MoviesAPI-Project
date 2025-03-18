@@ -1,5 +1,6 @@
-﻿using Movies.Contracts.Requests;
+﻿namespace Movies.Contracts.Responses;
 
-namespace Movies.Contracts.Responses;
-
-public class MoviesResponse : PagedResponse<MovieResponse> { }
+public class MoviesResponse : PagedResponse<MovieResponse>
+{
+    
+}
