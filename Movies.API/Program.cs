@@ -55,6 +55,18 @@ builder.Services.AddApiVersioning(x =>
     x.ApiVersionReader = new MediaTypeApiVersionReader("api-version");
 }).AddMvc();
 
+// builder.Services.AddResponseCaching();
+builder.Services.AddOutputCache(x =>
+{
+    x.AddBasePolicy(c => c.Cache());
+    x.AddPolicy("MovieCache", c =>
+    {
+        c.Cache()
+            .Expire(TimeSpan.FromMinutes(1))
+            .SetVaryByQuery(new[] { "title", "year", "sortBy", "page", "pageSize" })
+            .Tag("movies");
+    });
+});
 
 
 builder.Services.AddControllers();
@@ -82,6 +94,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// If using UseCors, add it before UseResponseCaching same with UseOutputCache
+// app.UseCors();
+// app.UseResponseCaching();
+app.UseOutputCache();
+
 
 app.UseMiddleware<ValidationMappingMiddleware>();
 app.MapControllers();
