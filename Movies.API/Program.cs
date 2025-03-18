@@ -1,4 +1,5 @@
 using System.Text;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Movies.API;
@@ -35,16 +36,23 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddAuthorization(x =>
 {
     // Admin 
-    x.AddPolicy(AuthConstants.AdminUserPolicyName, 
+    x.AddPolicy(AuthConstants.AdminUserPolicyName,
         p => p.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
-    
+
     // Trusted Member
-    x.AddPolicy(AuthConstants.TrustedMemberPolicyName, 
+    x.AddPolicy(AuthConstants.TrustedMemberPolicyName,
         p => p.RequireAssertion(
-            c => c.User.HasClaim(m => m is {Type: AuthConstants.AdminUserClaimName, Value: "true"}) 
-                                     || c.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true"})));
+            c => c.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" })
+                 || c.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" })));
 });
 
+builder.Services.AddApiVersioning(x =>
+{
+    x.DefaultApiVersion = new ApiVersion(1.0);
+    x.AssumeDefaultVersionWhenUnspecified = true;
+    x.ReportApiVersions = true;
+    x.ApiVersionReader = new MediaTypeApiVersionReader("api-version");
+}).AddMvc();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -52,7 +60,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddApplication();
 builder.Services.AddDatabase(config["Database:ConnectionString"]);
-    
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
